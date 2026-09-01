@@ -24,7 +24,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxext-dev libxxf86vm-dev
+        sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxext-dev libxxf86vm-dev xvfb
     
     - name: Cache Go modules
       uses: actions/cache@v3
@@ -37,8 +37,8 @@ jobs:
     - name: Download dependencies
       run: go mod download
     
-    - name: Run tests
-      run: go test -v -coverprofile=coverage.out ./...
+    - name: Run tests with virtual display
+      run: xvfb-run -a go test -v -coverprofile=coverage.out ./...
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
@@ -48,7 +48,7 @@ jobs:
         fail_ci_if_error: false
     
     - name: Run benchmarks
-      run: go test -bench=. -benchmem -run=^$ ./internal/game ./internal/audio
+      run: xvfb-run -a go test -bench=. -benchmem -run=^$ ./internal/game ./internal/audio
 
   build:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxext-dev libxxf86vm-dev
+        sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxext-dev libxxf86vm-dev xvfb
     
     - name: Cache Go modules
       uses: actions/cache@v3
@@ -77,8 +77,8 @@ jobs:
     - name: Download dependencies
       run: go mod download
     
-    - name: Build
-      run: go build -v -o bin/snake cmd/main.go
+    - name: Build with virtual display
+      run: xvfb-run -a go build -v -o bin/snake cmd/main.go
 
   lint:
     runs-on: ubuntu-latest
