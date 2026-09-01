@@ -78,7 +78,7 @@ jobs:
       run: go mod download
     
     - name: Build with virtual display
-      run: xvfb-run -a go build -v -o bin/snake cmd/main.go
+      run: go build -o bin/snake cmd/main.go
 
   lint:
     runs-on: ubuntu-latest
