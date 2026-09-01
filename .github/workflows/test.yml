@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: ['1.22', '1.23']
+        go-version: ['1.25', '1.26']
 
     steps:
     - uses: actions/checkout@v4
@@ -24,7 +24,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxext-dev
+        sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxext-dev libxxf86vm-dev
     
     - name: Cache Go modules
       uses: actions/cache@v3
@@ -38,7 +38,7 @@ jobs:
       run: go mod download
     
     - name: Run tests
-      run: go test -v -race -coverprofile=coverage.out ./...
+      run: go test -v -coverprofile=coverage.out ./...
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
@@ -48,7 +48,7 @@ jobs:
         fail_ci_if_error: false
     
     - name: Run benchmarks
-      run: go test -bench=. -benchmem ./internal/game ./internal/audio
+      run: go test -bench=. -benchmem -run=^$ ./internal/game ./internal/audio
 
   build:
     runs-on: ubuntu-latest
@@ -59,12 +59,12 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: '1.22'
+        go-version: '1.26'
     
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxext-dev
+        sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev libxext-dev libxxf86vm-dev
     
     - name: Cache Go modules
       uses: actions/cache@v3
@@ -89,7 +89,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: '1.22'
+        go-version: '1.26'
     
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v3

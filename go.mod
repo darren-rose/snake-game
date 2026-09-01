@@ -1,6 +1,6 @@
 module github.com/darren-rose/snake-in-go
 
-go 1.24.1
+go 1.26
 
 require github.com/hajimehoshi/ebiten/v2 v2.8.8
 
