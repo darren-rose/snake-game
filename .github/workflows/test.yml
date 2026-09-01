@@ -9,35 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go-version: ['1.26']
 
-    steps:
-    - uses: actions/checkout@v7
-    
-    - name: Set up Go
-      uses: actions/setup-go@v7
-      with:
-        go-version: ${{ matrix.go-version }}
-    
-    - name: Cache Go modules
-      uses: actions/cache@v6
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
-    
-    - name: Download dependencies
-      run: go mod download
-    
-    - name: Run tests with virtual display
-      run: go test -v -coverprofile=coverage.out ./...
-    
-  build:
-    runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v7
     
@@ -46,16 +18,9 @@ jobs:
       with:
         go-version: '1.26'
         
-    - name: Cache Go modules
-      uses: actions/cache@v6
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
-    
     - name: Download dependencies
       run: go mod download
     
-    - name: Build with virtual display
-      run: go build -o bin/snake cmd/main.go
+    - name: Run tests with virtual display
+      run: go test -v ./...
+    
